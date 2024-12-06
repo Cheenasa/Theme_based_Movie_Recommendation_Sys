@@ -41,6 +41,9 @@ st.markdown("""
         margin: 15px 0;
         transition: transform 0.3s ease;
         border-left: 5px solid #3498db;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: black; /* Change to solid black */
+        font-weight: bold; /* Ensure the text stands out */
     }
 
     .movie-card:hover {
@@ -167,12 +170,12 @@ def load_and_preprocess_data():
     data = pd.read_excel('rottentomatoes800.xlsx')
     data.dropna(subset=['movie_info', 'theme'], inplace=True)
     data['theme'] = data['theme'].astype(str)
-    data['genre'] = data['genre'].astype(str) if 'genre' in data.columns else ''
+    data['genres'] = data['genres'].astype(str) if 'genres' in data.columns else ''
     data['emotions'] = data['emotions'].astype(str) if 'emotions' in data.columns else ''
     data['processed_theme'] = data['theme'].apply(lambda x: ' '.join(process_text(x)))
-    data['processed_genre'] = data['genre'].apply(lambda x: ' '.join(process_text(x)))
+    data['processed_genres'] = data['genres'].apply(lambda x: ' '.join(process_text(x)))
     data['processed_emotions'] = data['emotions'].apply(lambda x: ' '.join(process_text(x)))
-    data['combined_features'] = data[['processed_theme', 'processed_genre', 'processed_emotions']].apply(' '.join, axis=1)
+    data['combined_features'] = data[['processed_theme', 'processed_genres', 'processed_emotions']].apply(' '.join, axis=1)
     return data
 
 @st.cache_resource
@@ -190,18 +193,18 @@ def get_recommendations(input_theme, vectorizer, tfidf_matrix, data, top_n=10):
         return None
 
     sorted_indices = sorted(positive_indices, key=lambda i: similarity_scores[i], reverse=True)[:top_n]
-    recommendations = data.iloc[sorted_indices][['movie_title', 'theme', 'genre', 'emotions']]
+    recommendations = data.iloc[sorted_indices][['movie_title', 'theme', 'genres', 'movie_info', 'emotions']]
     recommendations['similarity_score'] = similarity_scores[sorted_indices]
     return recommendations
 
 def main():
-    st.title("🎬 Movie Magic: Theme, Genre, and Emotion-Based Recommendations")
+    st.title("🎬 Movie Magic: Theme, Genres, and Emotion-Based Recommendations")
 
     try:
         with st.container():
             st.markdown("""
                 <div style='text-align: center; color: #7f8c8d; margin-bottom: 30px;'>
-                    Discover movies that match your interests! Enter a theme, genre, or emotion keywords below.
+                    Discover movies that match your interests! Enter a theme, genres, or emotion keywords below.
                 </div>
             """, unsafe_allow_html=True)
 
@@ -232,7 +235,8 @@ def main():
                                 <div class='movie-card'>
                                     <div class='movie-title'>{movie['movie_title']}</div>
                                     <div class='movie-theme'>Theme: {movie['theme']}</div>
-                                    <div class='movie-genre'>Genre: {movie['genre']}</div>
+                                    <div class='movie-genres'>Genre(s): {movie['genres']}</div>
+                                    <div class='movie-info'>Synopsis: {movie['movie_info']}</div>
                                     <div class='movie-emotions'>Emotions: {movie['emotions']}</div>
                                     <div class='similarity-score'>Match Score: {movie['similarity_score']:.2f}</div>
                                 </div>
