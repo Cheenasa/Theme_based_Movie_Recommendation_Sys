@@ -29,7 +29,8 @@ st.markdown("""
         margin-bottom: 30px;
         background: linear-gradient(45deg, #3498db, #2ecc71);
         -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        -webkit-text-fill-color: black; /* Change to solid black */
+        font-weight: bold; /* Ensure the text stands out */
     }
 
     /* Movie cards */
@@ -40,10 +41,7 @@ st.markdown("""
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         margin: 15px 0;
         transition: transform 0.3s ease;
-        border-left: 5px solid #3498db;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: black; /* Change to solid black */
-        font-weight: bold; /* Ensure the text stands out */
+        border-left: 5px solid #3498db;        
     }
 
     .movie-card:hover {
