@@ -41,7 +41,10 @@ st.markdown("""
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         margin: 15px 0;
         transition: transform 0.3s ease;
-        border-left: 5px solid #3498db;        
+        border-left: 5px solid #3498db;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: black; /* Change to solid black */
+        font-weight: bold; /* Ensure the text stands out */
     }
 
     .movie-card:hover {
@@ -236,7 +239,6 @@ def main():
                                     <div class='movie-genres'>Genre(s): {movie['genres']}</div>
                                     <div class='movie-info'>Synopsis: {movie['movie_info']}</div>
                                     <div class='movie-emotions'>Emotions: {movie['emotions']}</div>
-                                    <div class='similarity-score'>Match Score: {movie['similarity_score']:.2f}</div>
                                 </div>
                             """, unsafe_allow_html=True)
 
